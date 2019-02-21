@@ -3,7 +3,7 @@ Based on webrtc and php+swoole technology, use DrawerJS to realize collaborative
 
 Demo :
 
-
+![](https://github.com/bimcc/BimccRTC/blob/master/whiteboard-demo.png)
 
 In this example, after the canvas is drawn, click Send to synchronize. If you want to achieve realtime synchronization and Video communication , There is already related code in the demo. Please implement it yourself.
 #### Six basic concept in the WebRTC Peerconnection communication process:
@@ -15,6 +15,9 @@ In this example, after the canvas is drawn, click Send to synchronize. If you wa
 - 6.IceCandidate -- Peer establishes a connection directly with ICE/TURN/STUN Server to obtain its own NAT type and external network IP and port. The messages returned by these ICE/TURN/STUN Servers are IceCandidate or directly referred to as Candidate;
 
 #### Principle introduction :
+
+![](https://github.com/bimcc/BimccRTC/blob/master/1.png)
+![](https://github.com/bimcc/BimccRTC/blob/master/2.png)
 
 - ClientA and ClientB connect to Signaling Server through WebSocket.
 - ClientA first accesses the local media interface and data through GetMedia, 
