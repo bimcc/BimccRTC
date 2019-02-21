@@ -41,6 +41,8 @@ or you can create and initialize a PeerConnection as Phase 2 after establishing 
 
 #### Clinet Refernce API :
 ```
+var webrtc = BimccMultiRTC();
+
 //WebSocket server connected
 webrtc.on("connected", function (socket) {
     /*//create local stream
