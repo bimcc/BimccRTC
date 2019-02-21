@@ -7,12 +7,12 @@ Demo :
 
 In this example, after the canvas is drawn, click Send to synchronize. If you want to achieve realtime synchronization and Video communication , There is already related code in the demo. Please implement it yourself.
 #### Six basic concept in the WebRTC Peerconnection communication process:
-- 1.Signaling Server -- we use php and swoole to realize Signaling Server
-- 2.ICE/TURN/STUN Server  -- we use coturn server
-- 3.Room -- Signaling Server uses the concept of Room to manage the peers of the same set of communications. One room contains one or more peers.
-- 4.Offer -- The peer that actively establishes a P2P link with other peers organizes its SDP information and forwards it to other peers in the room through the signaling server. This SDP packet is Offer.
-- 5.Answer -- After receiving the offer information of other peers forwarded by the signaling server, the passively connected Peer also organizes its own SDP information, and also forwards it to the peer that actively connects to it through the signaling server. His own SDP information packet is Answer;
-- 6.IceCandidate -- Peer establishes a connection directly with ICE/TURN/STUN Server to obtain its own NAT type and external network IP and port. The messages returned by these ICE/TURN/STUN Servers are IceCandidate or directly referred to as Candidate;
+- Signaling Server -- we use php and swoole to realize Signaling Server
+- ICE/TURN/STUN Server  -- we use coturn server
+- Room -- Signaling Server uses the concept of Room to manage the peers of the same set of communications. One room contains one or more peers.
+- Offer -- The peer that actively establishes a P2P link with other peers organizes its SDP information and forwards it to other peers in the room through the signaling server. This SDP packet is Offer.
+- Answer -- After receiving the offer information of other peers forwarded by the signaling server, the passively connected Peer also organizes its own SDP information, and also forwards it to the peer that actively connects to it through the signaling server. His own SDP information packet is Answer;
+- IceCandidate -- Peer establishes a connection directly with ICE/TURN/STUN Server to obtain its own NAT type and external network IP and port. The messages returned by these ICE/TURN/STUN Servers are IceCandidate or directly referred to as Candidate;
 
 #### Principle introduction :
 
