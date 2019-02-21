@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>教学共享白板</title>
+    <link href="./public/font-awesome-4.7.0/css/font-awesome.css" rel="stylesheet">
+    <link rel="stylesheet" href="./public/DrawerJs/drawerJs.css">
+    <style type="text/css">
+        html, body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+
+        #videos {
+            position: absolute;
+            left: 30%;
+            top: 0;
+            bottom: 0;
+            right: 0;
+            overflow: auto;
+        }
+
+        #videos video {
+            display: inline-block;
+            width: 32%;
+        }
+
+        #chat {
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 30%;
+            border: 1px solid #0f0f0f;
+        }
+
+        #chat .msgIpt{
+            position: absolute;
+            left: 0;
+            width: 80%;
+        }
+
+        #chat .sendBtn {
+            position: absolute;
+            left: 80%;
+            width: 20%;
+        }
+
+        #chat .msgIpt, #chat .sendBtn {
+            bottom: 0;
+        }
+
+        #chat .msgs {
+            padding: 5%;
+        }
+
+        #chat .msgs p {
+            margin: 0.3em 0;
+        }
+    </style>
+</head>
+<body>
+<div id="chat">
+    <span style="position: absolute;top:45%;left: 170px;font-size: 30px;color: red;">教师-学生 互动交流区</span>
+    <div class="msgs" id="msgs"></div>
+    <input type="text" id="msgIpt" class="msgIpt" style="height: 34px;margin-bottom: 1px;">
+    <button id="sendBtn" class="sendBtn" style="height: 40px;margin-bottom: 1px;">发送</button>
+</div>
+<div id="videos">
+    <!--<video id="me" autoplay></video>-->
+    <div id="canvas" style="position: relative;margin-left:15px;margin-top: 40px;width: 96%;"></div>
+</div>
+</body>
+<script type="text/javascript" src="./public/BimccWebRTC.js"></script>
+<script src="./public/DrawerJs/jquery.min.js"></script>
+<script src="./public/DrawerJs/drawerJs.standalone.js"></script>
+<script src="./public/DrawerJs/drawerJsConfig.js"></script>
+<script src="./public/DrawerJs/DrawerLocalization.js"></script>
+<script type="text/javascript">
+    (function () {
+        var sendBtn = document.getElementById("sendBtn");
+        var msgs = document.getElementById("msgs");
+        var webrtc = BimccMultiRTC();
+
+        $('#canvas').append(canvas.getHtml());
+        canvas.onInsert();
+        canvas.api.startEditing();
+
+        /**********************************************************/
+        sendBtn.onclick = function (event) {
+            /*var msgIpt = document.getElementById("msgIpt"),
+                msg = msgIpt.value,
+                p = document.createElement("p");
+            p.innerText = "me: " + msg;
+            //广播消息
+            webrtc.broadcast(msg);
+            msgIpt.value = "";
+            msgs.appendChild(p);*/
+            var serializedCanvasData = canvas.api.getCanvasAsJSON();
+            // console.log(serializedCanvasData);
+            webrtc.broadcast(serializedCanvasData);
+
+        };
+
+        //成功创建WebSocket连接
+        webrtc.on("connected", function (socket) {
+            /*//创建本地视频流
+            webrtc.createStream({
+              "video": true,
+              "audio": true
+            });*/
+            webrtc.allReadyComplete();
+        });
+        /*
+        //创建本地视频流成功
+        webrtc.on("stream_created", function(stream) {
+          document.getElementById('me').src = URL.createObjectURL(stream);
+          document.getElementById('me').play();
+        });
+
+        //创建本地视频流失败
+        webrtc.on("stream_create_error", function() {
+          alert("create stream failed!");
+        });
+
+        //接收到其他用户的视频流
+        webrtc.on('pc_add_stream', function(stream, socketId) {
+          var newVideo = document.createElement("video"),
+              id = "other-" + socketId;
+          newVideo.setAttribute("class", "other");
+          newVideo.setAttribute("autoplay", "autoplay");
+          newVideo.setAttribute("id", id);
+          videos.appendChild(newVideo);
+          webrtc.attachStream(stream, id);
+        });
+        */
+
+        //删除其他用户
+        webrtc.on('remove_peer', function (socketId) {
+            var video = document.getElementById('other-' + socketId);
+            if (video) {
+                video.parentNode.removeChild(video);
+            }
+        });
+
+        //接收到数据通道信息
+        webrtc.on('data_channel_message', function (channel, socketId, message) {
+            /*var p = document.createElement("p");
+            p.innerText = socketId + ": " + message;
+            msgs.appendChild(p);*/
+            // console.log(message);
+            canvas.api.loadCanvasFromData(message);
+
+        });
+
+        //连接WebSocket服务器
+        webrtc.connect("ws://ip地址或域名:3000?room=room1", 'room1');
+    })();
+</script>
+</html>
